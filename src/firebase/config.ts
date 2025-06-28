@@ -14,7 +14,7 @@ const firebaseConfig = {
   projectId: "bacc-8ed51",
   storageBucket: "bacc-8ed51.firebasestorage.app",
   messagingSenderId: "570715122823",
-  appId: "1:570715122823:web:918705150bbb685c0c9c22",
+  appId: "1k:570715122823:web:918705150bbb685c0c9c22",
   measurementId: "G-JRP54Z9B3X"
 };
 
