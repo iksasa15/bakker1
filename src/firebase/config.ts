@@ -9,7 +9,7 @@ import { getStorage, FirebaseStorage } from "firebase/storage";
 
 // تكوين تطبيق Firebase الخاص بك
 const firebaseConfig = {
-  apiKey: "AIzaSyAT9WUzJhiz_TiD_LPky_TBRTh07ds8PkE",
+  
   authDomain: "bacc-8ed51.firebaseapp.com",
   projectId: "bacc-8ed51",
   storageBucket: "bacuyuc-8ed51.firebasestorage.app",
