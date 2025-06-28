@@ -10,12 +10,13 @@ import { getStorage, FirebaseStorage } from "firebase/storage";
 // تكوين تطبيق Firebase الخاص بك
 const firebaseConfig = {
   
-  authDomain: "bac،ttt،c-8نننed51.firebaseapp.com",
-  projectId: "bacc-8ed51",
-  storageBucket: "bacuyuc-8ed51.firebasestorage.app",
-  messagingSenderId: "570715122823",
-  appId: "1:570715122823:web:918705150bbb685c0c9c22",
-  measurementId: "G-JRP54Z9B3X"
+  apiKey: "AIzaSyD4YntC3iYp6A2U0HZtwCziY5ABnamobYE",
+  authDomain: "bakker-e803d.firebaseapp.com",
+  projectId: "bakker-e803d",
+  storageBucket: "bakker-e803d.firebasestorage.app",
+  messagingSenderId: "77098358966",
+  appId: "1:77098358966:web:ca71300b956371e3032e17",
+  measurementId: "G-7TKV1TBQ10"
 };
 
 // تعريف المتغيرات مع أنواع البيانات
