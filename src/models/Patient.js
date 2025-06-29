@@ -4,7 +4,8 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword,
   signOut,
-  updateProfile
+  updateProfile,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import { 
   doc, 
@@ -34,6 +35,14 @@ class Patient {
   // إنشاء حساب جديد للمريض
   static async register(patientName, email, password, phoneNumber, dateOfBirth, gender) {
     try {
+      // التحقق من تاريخ الميلاد (ألا يكون في المستقبل)
+      const birthDate = new Date(dateOfBirth);
+      const today = new Date();
+      
+      if (birthDate > today) {
+        throw new Error("تاريخ الميلاد لا يمكن أن يكون في المستقبل");
+      }
+      
       // إنشاء حساب المستخدم في Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -94,6 +103,17 @@ class Patient {
       }
     } catch (error) {
       console.error("Error logging in:", error);
+      throw error;
+    }
+  }
+
+  // إعادة تعيين كلمة المرور
+  static async resetPassword(email) {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      return true;
+    } catch (error) {
+      console.error("Error resetting password:", error);
       throw error;
     }
   }

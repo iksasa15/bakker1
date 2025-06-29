@@ -11,16 +11,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ar" dir="rtl" className="numbers-en">
-      <body className="flex min-h-screen flex-col bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-900 dark:to-gray-800">
+      <body className="flex min-h-screen flex-col bg-gradient-to-br from-white to-blue-50 dark:from-gray-900 dark:to-gray-800">
         {/* Abstract medical background pattern */}
-        <div className="fixed inset-0 z-0 opacity-5 dark:opacity-10 pointer-events-none">
+        <div className="fixed inset-0 z-0 opacity-3 dark:opacity-10 pointer-events-none">
           <div className="absolute inset-0 bg-repeat" style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30,10 L70,10 L70,50 L30,50 Z' fill='none' stroke='%23BFDBFE' stroke-width='2' /%3E%3Ccircle cx='50' cy='30' r='10' fill='none' stroke='%23BBF7D0' stroke-width='2' /%3E%3Cpath d='M10,30 L20,30 M15,25 L15,35' stroke='%23BFDBFE' stroke-width='2' /%3E%3Cpath d='M80,30 L90,30 M85,25 L85,35' stroke='%23BBF7D0' stroke-width='2' /%3E%3Cpath d='M50,70 L50,90' stroke='%23BFDBFE' stroke-width='2' /%3E%3Ccircle cx='50' cy='80' r='5' fill='none' stroke='%23BBF7D0' stroke-width='1' /%3E%3C/svg%3E")`,
             backgroundSize: '100px 100px'
           }}></div>
           
           {/* إضافة رموز تعبيرية طبية خفيفة */}
-          <div className="absolute opacity-5">
+          <div className="absolute opacity-3">
             <span style={{position: 'absolute', top: '15%', left: '10%', fontSize: '40px'}}>💉</span>
             <span style={{position: 'absolute', top: '35%', right: '15%', fontSize: '36px'}}>💊</span>
             <span style={{position: 'absolute', top: '65%', left: '20%', fontSize: '42px'}}>🧬</span>
