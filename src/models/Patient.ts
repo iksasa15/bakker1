@@ -1,11 +1,13 @@
-// src/models/Patient.js
+// src/models/Patient.ts
 
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  User,
+  UserCredential
 } from "firebase/auth";
 import { 
   doc, 
@@ -17,13 +19,46 @@ import {
   deleteDoc, 
   query, 
   where, 
-  getDocs 
+  getDocs,
+  DocumentData,
+  QuerySnapshot,
+  DocumentSnapshot,
+  Timestamp
 } from "firebase/firestore";
 import { auth, db } from "../firebase/config"; // مسار محدث للاستيراد
 
+interface PatientData {
+  patientId: string;
+  patientName: string;
+  email: string;
+  phoneNumber: string;
+  dateOfBirth: string | Date;
+  gender: string;
+  createdAt?: Date | Timestamp;
+}
+
+interface DiagnosisData extends DocumentData {
+  id: string;
+  patientId: string;
+  [key: string]: unknown;
+}
+
 class Patient {
-  constructor(patientId = null, patientName = "", email = "", phoneNumber = "", 
-              dateOfBirth = null, gender = "") {
+  patientId: string | null;
+  patientName: string;
+  email: string;
+  phoneNumber: string;
+  dateOfBirth: string | Date | null;
+  gender: string;
+
+  constructor(
+    patientId: string | null = null, 
+    patientName: string = "", 
+    email: string = "", 
+    phoneNumber: string = "", 
+    dateOfBirth: string | Date | null = null, 
+    gender: string = ""
+  ) {
     this.patientId = patientId;
     this.patientName = patientName;
     this.email = email;
@@ -33,7 +68,14 @@ class Patient {
   }
 
   // إنشاء حساب جديد للمريض
-  static async register(patientName, email, password, phoneNumber, dateOfBirth, gender) {
+  static async register(
+    patientName: string, 
+    email: string, 
+    password: string, 
+    phoneNumber: string, 
+    dateOfBirth: string | Date, 
+    gender: string
+  ): Promise<Patient> {
     try {
       // التحقق من تاريخ الميلاد (ألا يكون في المستقبل)
       const birthDate = new Date(dateOfBirth);
@@ -44,8 +86,8 @@ class Patient {
       }
       
       // إنشاء حساب المستخدم في Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user: User = userCredential.user;
       
       // تحديث الملف الشخصي مع اسم المريض
       await updateProfile(user, {
@@ -53,7 +95,7 @@ class Patient {
       });
       
       // إنشاء وثيقة المريض في Firestore
-      const patientData = {
+      const patientData: PatientData = {
         patientId: user.uid,
         patientName: patientName,
         email: email,
@@ -80,16 +122,16 @@ class Patient {
   }
 
   // تسجيل الدخول للمريض
-  static async login(email, password) {
+  static async login(email: string, password: string): Promise<Patient> {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user: User = userCredential.user;
       
       // استرجاع بيانات المريض من Firestore
-      const patientDoc = await getDoc(doc(db, "patients", user.uid));
+      const patientDoc: DocumentSnapshot = await getDoc(doc(db, "patients", user.uid));
       
       if (patientDoc.exists()) {
-        const patientData = patientDoc.data();
+        const patientData = patientDoc.data() as PatientData;
         return new Patient(
           patientData.patientId,
           patientData.patientName,
@@ -108,7 +150,7 @@ class Patient {
   }
 
   // إعادة تعيين كلمة المرور
-  static async resetPassword(email) {
+  static async resetPassword(email: string): Promise<boolean> {
     try {
       await sendPasswordResetEmail(auth, email);
       return true;
@@ -119,7 +161,7 @@ class Patient {
   }
 
   // تسجيل الخروج
-  static async logout() {
+  static async logout(): Promise<boolean> {
     try {
       await signOut(auth);
       return true;
@@ -129,10 +171,13 @@ class Patient {
     }
   }
 
-  // باقي الكود كما هو...
   // إنشاء أعراض جديدة
-  async createSymptom(symName) {
+  async createSymptom(symName: string): Promise<string> {
     try {
+      if (!this.patientId) {
+        throw new Error("يجب تسجيل الدخول أولا");
+      }
+      
       const symptomData = {
         patientId: this.patientId,
         name: symName,
@@ -148,13 +193,17 @@ class Patient {
   }
 
   // تعديل الأعراض
-  async modifySymptom(symId, newData) {
+  async modifySymptom(symId: string, newData: string): Promise<boolean> {
     try {
+      if (!this.patientId) {
+        throw new Error("يجب تسجيل الدخول أولا");
+      }
+      
       const symptomRef = doc(db, "symptoms", symId);
       
       // التحقق من أن العرض ينتمي للمريض
       const symptomDoc = await getDoc(symptomRef);
-      if (!symptomDoc.exists() || symptomDoc.data().patientId !== this.patientId) {
+      if (!symptomDoc.exists() || symptomDoc.data()?.patientId !== this.patientId) {
         throw new Error("لا يمكن تعديل هذا العرض");
       }
       
@@ -171,13 +220,17 @@ class Patient {
   }
 
   // حذف الأعراض
-  async deleteSymptom(symId) {
+  async deleteSymptom(symId: string): Promise<boolean> {
     try {
+      if (!this.patientId) {
+        throw new Error("يجب تسجيل الدخول أولا");
+      }
+      
       const symptomRef = doc(db, "symptoms", symId);
       
       // التحقق من أن العرض ينتمي للمريض
       const symptomDoc = await getDoc(symptomRef);
-      if (!symptomDoc.exists() || symptomDoc.data().patientId !== this.patientId) {
+      if (!symptomDoc.exists() || symptomDoc.data()?.patientId !== this.patientId) {
         throw new Error("لا يمكن حذف هذا العرض");
       }
       
@@ -190,21 +243,25 @@ class Patient {
   }
 
   // عرض التشخيص
-  async viewDiagnosis() {
+  async viewDiagnosis(): Promise<DiagnosisData[]> {
     try {
+      if (!this.patientId) {
+        throw new Error("يجب تسجيل الدخول أولا");
+      }
+      
       const diagnosisQuery = query(
         collection(db, "diagnoses"),
         where("patientId", "==", this.patientId)
       );
       
-      const querySnapshot = await getDocs(diagnosisQuery);
-      const diagnoses = [];
+      const querySnapshot: QuerySnapshot = await getDocs(diagnosisQuery);
+      const diagnoses: DiagnosisData[] = [];
       
       querySnapshot.forEach((doc) => {
         diagnoses.push({
           id: doc.id,
           ...doc.data()
-        });
+        } as DiagnosisData);
       });
       
       return diagnoses;
@@ -215,8 +272,12 @@ class Patient {
   }
 
   // إنشاء تقييم
-  async createFeedback(content) {
+  async createFeedback(content: string): Promise<string> {
     try {
+      if (!this.patientId) {
+        throw new Error("يجب تسجيل الدخول أولا");
+      }
+      
       const feedbackData = {
         patientId: this.patientId,
         patientName: this.patientName,

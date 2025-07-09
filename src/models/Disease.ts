@@ -22,10 +22,7 @@ export interface DiseaseData {
   status: 'active' | 'cured' | 'chronic' | 'in_treatment';
   severity: 'mild' | 'moderate' | 'severe';
   symptoms: string[];
-  notes?: string;
   treatments?: string[];
-  doctorName?: string;
-  hospitalName?: string;
 }
 
 export default class Disease {
@@ -36,10 +33,7 @@ export default class Disease {
   status: 'active' | 'cured' | 'chronic' | 'in_treatment';
   severity: 'mild' | 'moderate' | 'severe';
   symptoms: string[];
-  notes?: string;
   treatments?: string[];
-  doctorName?: string;
-  hospitalName?: string;
 
   constructor(data: DiseaseData) {
     this.id = data.id;
@@ -49,10 +43,7 @@ export default class Disease {
     this.status = data.status;
     this.severity = data.severity;
     this.symptoms = data.symptoms;
-    this.notes = data.notes;
     this.treatments = data.treatments;
-    this.doctorName = data.doctorName;
-    this.hospitalName = data.hospitalName;
   }
 
   // تحويل بيانات الكلاس إلى كائن يمكن تخزينه في Firestore
@@ -64,10 +55,7 @@ export default class Disease {
       status: this.status,
       severity: this.severity,
       symptoms: this.symptoms,
-      notes: this.notes || '',
       treatments: this.treatments || [],
-      doctorName: this.doctorName || '',
-      hospitalName: this.hospitalName || '',
       updatedAt: Timestamp.now()
     };
   }
@@ -82,10 +70,7 @@ export default class Disease {
       status: data.status,
       severity: data.severity,
       symptoms: data.symptoms,
-      notes: data.notes,
-      treatments: data.treatments,
-      doctorName: data.doctorName,
-      hospitalName: data.hospitalName
+      treatments: data.treatments
     });
   }
 

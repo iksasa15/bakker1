@@ -6,6 +6,9 @@ import Allergy from "./Allergy";
 import Medication from "./Medication";
 
 export default class MedicalHistory {
+  getDiseaseStatistics() {
+    throw new Error("Method not implemented.");
+  }
   patientId: string;
   
   constructor(patientId: string) {
