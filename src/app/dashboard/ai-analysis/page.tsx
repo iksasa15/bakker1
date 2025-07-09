@@ -19,7 +19,7 @@ export default function AIAnalysisPage() {
   const [, setUserId] = useState<string | null>(null);
   const [symptomText, setSymptomText] = useState("");
   // تعديل المنفذ الافتراضي ليطابق خادم Flask
-  const [serverIP, setServerIP] = useState("localhost:5001");
+  const [serverIP, setServerIP] = useState("192.168.1.39:5021"); // تحديث العنوان الافتراضي
   const [diagnosisResults, setDiagnosisResults] = useState<DiagnosisResult[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
@@ -58,26 +58,54 @@ export default function AIAnalysisPage() {
       const apiUrl = `http://${serverIP}/api/diagnose`;
       console.log(`محاولة الاتصال بـ: ${apiUrl}`);
       
+      // طباعة البيانات المرسلة للتصحيح
+      const requestData = { 
+        symptoms: symptomText,
+        auto_use_suggestions: true 
+      };
+      console.log("البيانات المرسلة:", requestData);
+      
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*', // إضافة هذا للمساعدة في حل مشاكل CORS
         },
-        body: JSON.stringify({ 
-          symptoms: symptomText,
-          auto_use_suggestions: true 
-        }),
+        mode: 'cors', // تحديد وضع الطلب
+        body: JSON.stringify(requestData),
       });
       
       // طباعة حالة الاستجابة للتصحيح
       console.log(`حالة الاستجابة: ${response.status} ${response.statusText}`);
       
-      const data = await response.json();
-      console.log("البيانات المستلمة:", data);
-      
       if (!response.ok) {
-        throw new Error(data.message || 'حدث خطأ في التشخيص');
+        // محاولة قراءة النص قبل محاولة تحليل JSON
+        const textResponse = await response.text();
+        console.log("استجابة النص:", textResponse);
+        
+        let errorData;
+        try {
+          errorData = JSON.parse(textResponse);
+        } catch {
+          // إذا فشل تحليل JSON، استخدم النص كما هو
+          throw new Error(textResponse || `خطأ: ${response.status}`);
+        }
+        
+        throw new Error(errorData.message || 'حدث خطأ في التشخيص');
       }
+      
+      const textResponse = await response.text();
+      console.log("استجابة النص الخام:", textResponse);
+      
+      let data;
+      try {
+        data = JSON.parse(textResponse);
+      } catch {
+        throw new Error("فشل في تحليل استجابة JSON");
+      }
+      
+      console.log("البيانات المستلمة:", data);
       
       // تنسيق النتائج للعرض
       interface RawDiagnosisResult {
@@ -118,6 +146,21 @@ export default function AIAnalysisPage() {
   // الرجوع للصفحة السابقة
   const goBack = () => {
     router.push("/dashboard");
+  };
+  
+  // اختبار الاتصال بالخادم
+  const testConnection = async () => {
+    try {
+      const response = await fetch(`http://${serverIP}/`);
+      if (response.ok) {
+        setErrorMessage(`تم الاتصال بالخادم بنجاح! الاستجابة: ${response.status}`);
+      } else {
+        setErrorMessage(`فشل الاتصال بالخادم. الاستجابة: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("خطأ اختبار الاتصال:", error);
+      setErrorMessage(`فشل في اختبار الاتصال: ${error instanceof Error ? error.message : 'خطأ غير معروف'}`);
+    }
   };
   
   if (loading) {
@@ -164,14 +207,22 @@ export default function AIAnalysisPage() {
               <input
                 id="server-ip"
                 type="text"
-                placeholder="مثال: localhost:5001 أو 192.168.1.5:5001"
+                placeholder="مثال: localhost:5021 أو 192.168.1.5:5021"
                 value={serverIP}
                 onChange={(e) => setServerIP(e.target.value)}
                 className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
               />
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                أدخل عنوان IP أو اسم المضيف مع المنفذ لخادم Flask
-              </p>
+              <div className="mt-2 flex space-x-2 space-x-reverse">
+                <button 
+                  onClick={testConnection}
+                  className="px-3 py-1 bg-blue-100 text-blue-800 rounded hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-100 dark:hover:bg-blue-800"
+                >
+                  اختبار الاتصال
+                </button>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  أدخل عنوان IP أو اسم المضيف مع المنفذ لخادم Flask
+                </p>
+              </div>
             </div>
             
             {/* حقل إدخال الأعراض */}
