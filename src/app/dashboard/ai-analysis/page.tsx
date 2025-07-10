@@ -4,7 +4,49 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../../firebase/config";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "../../../firebase/config";
+
+// قائمة شاملة بالأعراض المستخرجة من البيانات
+const allSymptoms = [
+  "itching", "skin_rash", "nodal_skin_eruptions", "dischromic _patches", 
+  "continuous_sneezing", "shivering", "chills", "watering_from_eyes",
+  "stomach_pain", "acidity", "ulcers_on_tongue", "vomiting", "cough", 
+  "chest_pain", "yellowish_skin", "nausea", "loss_of_appetite", 
+  "abdominal_pain", "yellowing_of_eyes", "burning_micturition", 
+  "spotting_ urination", "fatigue", "weight_loss", "restlessness", 
+  "lethargy", "irregular_sugar_level", "blurred_and_distorted_vision", 
+  "obesity", "excessive_hunger", "increased_appetite", "polyuria",
+  "muscle_wasting", "patches_in_throat", "high_fever", "extra_marital_contacts",
+  "joint_pain", "back_pain", "constipation", "pain_during_bowel_movements", 
+  "pain_in_anal_region", "bloody_stool", "irritation_in_anus", "neck_pain", 
+  "dizziness", "cramps", "bruising", "obesity", "swollen_legs", 
+  "swollen_blood_vessels", "puffy_face_and_eyes", "enlarged_thyroid", 
+  "brittle_nails", "swollen_extremeties", "excessive_hunger", 
+  "drying_and_tingling_lips", "slurred_speech", "knee_pain", "hip_joint_pain", 
+  "muscle_weakness", "stiff_neck", "swelling_joints", "movement_stiffness", 
+  "spinning_movements", "loss_of_balance", "unsteadiness", "weakness_of_one_body_side", 
+  "loss_of_smell", "bladder_discomfort", "foul_smell_of urine", 
+  "continuous_feel_of_urine", "passage_of_gases", "internal_itching", 
+  "toxic_look_(typhos)", "depression", "irritability", "muscle_pain", 
+  "altered_sensorium", "red_spots_over_body", "belly_pain", "abnormal_menstruation", 
+  "dischromic _patches", "watering_from_eyes", "increased_appetite", "polyuria", 
+  "family_history", "mucoid_sputum", "rusty_sputum", "lack_of_concentration", 
+  "visual_disturbances", "receiving_blood_transfusion", "receiving_unsterile_injections", 
+  "coma", "stomach_bleeding", "distention_of_abdomen", "history_of_alcohol_consumption", 
+  "fluid_overload", "blood_in_sputum", "prominent_veins_on_calf", "palpitations", 
+  "painful_walking", "pus_filled_pimples", "blackheads", "scurring", "skin_peeling", 
+  "silver_like_dusting", "small_dents_in_nails", "inflammatory_nails", "blister", 
+  "red_sore_around_nose", "yellow_crust_ooze", "breathlessness", "sweating",
+  "dehydration", "mild_fever", "sunken_eyes", "headache", "dark_urine", 
+  "yellow_urine", "cold_hands_and_feets", "mood_swings", "weight_gain", "anxiety", 
+  "indigestion", "malaise", "phlegm", "throat_irritation", "redness_of_eyes", 
+  "sinus_pressure", "runny_nose", "congestion", "stiff_neck", "fast_heart_rate", 
+  "pain_behind_the_eyes", "diarrhoea", "acute_liver_failure", "swelling_of_stomach"
+];
+
+// ترتيب الأعراض أبجديًا لسهولة الاستخدام
+const sortedSymptoms = [...new Set(allSymptoms)].sort();
 
 interface DiagnosisResult {
   disease: string;
@@ -16,8 +58,9 @@ export default function AIAnalysisPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [diagnosing, setDiagnosing] = useState(false);
-  const [, setUserId] = useState<string | null>(null);
-  const [symptomText, setSymptomText] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
+  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
   // تعديل المنفذ الافتراضي ليطابق خادم Flask
   const [serverIP, setServerIP] = useState("192.168.1.39:5021"); // تحديث العنوان الافتراضي
   const [diagnosisResults, setDiagnosisResults] = useState<DiagnosisResult[]>([]);
@@ -43,10 +86,19 @@ export default function AIAnalysisPage() {
     return () => unsubscribe();
   }, [router, authChecked]);
   
+  // تبديل اختيار الأعراض
+  const toggleSymptom = (symptom: string) => {
+    setSelectedSymptoms(prev => 
+      prev.includes(symptom) 
+        ? prev.filter(s => s !== symptom) 
+        : [...prev, symptom]
+    );
+  };
+  
   // إجراء التشخيص مع تحسين التعامل مع الأخطاء
   const performDiagnosis = async () => {
-    if (!symptomText.trim()) {
-      setErrorMessage("الرجاء إدخال الأعراض");
+    if (selectedSymptoms.length === 0) {
+      setErrorMessage("الرجاء اختيار الأعراض أولاً");
       return;
     }
     
@@ -58,9 +110,12 @@ export default function AIAnalysisPage() {
       const apiUrl = `http://${serverIP}/api/diagnose`;
       console.log(`محاولة الاتصال بـ: ${apiUrl}`);
       
+      // تحويل الأعراض المختارة إلى نص مفصول بفواصل
+      const symptomsText = selectedSymptoms.join(", ");
+      
       // طباعة البيانات المرسلة للتصحيح
       const requestData = { 
-        symptoms: symptomText,
+        symptoms: symptomsText,
         auto_use_suggestions: true 
       };
       console.log("البيانات المرسلة:", requestData);
@@ -120,6 +175,19 @@ export default function AIAnalysisPage() {
       }));
       
       setDiagnosisResults(formattedResults);
+      
+      // حفظ نتائج التشخيص في Firestore
+      if (userId && formattedResults.length > 0) {
+        await addDoc(collection(db, "exams"), {
+          userId,
+          date: serverTimestamp(),
+          symptoms: selectedSymptoms,
+          results: formattedResults,
+          // يمكن إضافة حقول أخرى هنا إذا لزم الأمر
+        });
+        console.log("تم حفظ نتائج التشخيص بنجاح");
+      }
+      
     } catch (error: unknown) {
       console.error("خطأ في التشخيص:", error);
       
@@ -148,6 +216,11 @@ export default function AIAnalysisPage() {
     router.push("/dashboard");
   };
   
+  // الانتقال لصفحة الفحوصات السابقة
+  const goToPreviousExams = () => {
+    router.push("/dashboard/previous-exams");
+  };
+  
   // اختبار الاتصال بالخادم
   const testConnection = async () => {
     try {
@@ -162,6 +235,11 @@ export default function AIAnalysisPage() {
       setErrorMessage(`فشل في اختبار الاتصال: ${error instanceof Error ? error.message : 'خطأ غير معروف'}`);
     }
   };
+  
+  // تصفية الأعراض بناءً على مصطلح البحث
+  const filteredSymptoms = sortedSymptoms.filter(symptom => 
+    symptom.replace(/_/g, ' ').includes(searchTerm.toLowerCase())
+  );
   
   if (loading) {
     return (
@@ -197,8 +275,20 @@ export default function AIAnalysisPage() {
           </h1>
         </div>
         
+        <div className="flex justify-between items-center mb-6">
+          <p className="text-gray-600 dark:text-gray-300">
+            أدخل الأعراض التي تعاني منها للحصول على تحليل طبي مبدئي
+          </p>
+          <button
+            onClick={goToPreviousExams}
+            className="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-100 dark:hover:bg-blue-800"
+          >
+            عرض الفحوصات السابقة
+          </button>
+        </div>
+        
         <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-xl p-6 mb-8 border border-blue-50 dark:border-blue-900">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             {/* حقل إدخال عنوان IP للخادم */}
             <div className="mb-6">
               <label htmlFor="server-ip" className="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -225,28 +315,84 @@ export default function AIAnalysisPage() {
               </div>
             </div>
             
-            {/* حقل إدخال الأعراض */}
+            {/* قسم اختيار الأعراض */}
             <div className="mb-6">
-              <label htmlFor="symptoms" className="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
-                أدخل الأعراض التي تعاني منها
+              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
+                اختر الأعراض التي تعاني منها
               </label>
-              <textarea
-                id="symptoms"
-                placeholder="أدخل الأعراض هنا..."
-                value={symptomText}
-                onChange={(e) => setSymptomText(e.target.value)}
-                className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 min-h-[150px]"
-                rows={5}
+              
+              {/* حقل البحث عن الأعراض */}
+              <input
+                type="text"
+                placeholder="ابحث عن أعراض..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+                className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 mb-4"
               />
+              
+              {/* عرض الأعراض المختارة */}
+              {selectedSymptoms.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    الأعراض المختارة ({selectedSymptoms.length}):
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedSymptoms.map(symptom => (
+                      <span 
+                        key={symptom} 
+                        className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100 rounded-full px-3 py-1 text-sm flex items-center"
+                      >
+                        {symptom.replace(/_/g, ' ')}
+                        <button 
+                          onClick={() => toggleSymptom(symptom)}
+                          className="mr-1 ml-2 text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* قائمة مربعات الاختيار للأعراض */}
+              <div className="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-lg p-4 max-h-[300px] overflow-y-auto">
+                {filteredSymptoms.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {filteredSymptoms.map(symptom => (
+                      <div key={symptom} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={`symptom-${symptom}`}
+                          checked={selectedSymptoms.includes(symptom)}
+                          onChange={() => toggleSymptom(symptom)}
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                        />
+                        <label 
+                          htmlFor={`symptom-${symptom}`}
+                          className="mr-2 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer"
+                        >
+                          {symptom.replace(/_/g, ' ')}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-center text-gray-500 dark:text-gray-400 py-4">
+                    لا توجد نتائج للبحث
+                  </p>
+                )}
+              </div>
+              
               <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                أدخل الأعراض مفصولة بفواصل. مثال: حمى، صداع، سعال
+                اختر الأعراض التي تعاني منها. يمكنك البحث واختيار أكثر من عرض.
               </p>
             </div>
             
             <div className="flex justify-center">
               <button
                 onClick={performDiagnosis}
-                disabled={diagnosing || !symptomText.trim() || !serverIP.trim()}
+                disabled={diagnosing || selectedSymptoms.length === 0 || !serverIP.trim()}
                 className={`px-8 py-3 bg-gradient-to-r from-blue-600 to-green-500 text-white rounded-lg 
                   hover:from-blue-700 hover:to-green-600 disabled:opacity-50 disabled:cursor-not-allowed
                   flex items-center`}

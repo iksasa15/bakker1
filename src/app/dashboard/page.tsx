@@ -60,11 +60,6 @@ export default function DashboardPage() {
     router.push("/dashboard/ai-analysis");
   };
 
-  // الانتقال إلى صفحة الكشف المبكر
-  const handleEarlyDetectionClick = () => {
-    router.push("/dashboard/early-detection");
-  };
-
   // الانتقال إلى صفحة الكشوف السابقة
   const handlePreviousExamsClick = () => {
     router.push("/dashboard/previous-exams");
@@ -109,8 +104,8 @@ export default function DashboardPage() {
             أهلاً بك في لوحة تحكم المريض. ماذا تريد أن تفعل اليوم؟
           </p>
           
-          {/* الأزرار الأربعة بتصميم محسن */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          {/* الأزرار الثلاثة بتصميم محسن */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <button
               onClick={handleMedicalHistoryClick}
               className="group p-6 bg-white/80 dark:bg-gray-700/80 rounded-xl shadow-lg hover:shadow-xl border-t-4 border-blue-600 transition-all duration-300 transform hover:-translate-y-1 text-right"
@@ -146,23 +141,6 @@ export default function DashboardPage() {
             </button>
             
             <button
-              onClick={handleEarlyDetectionClick}
-              className="group p-6 bg-white/80 dark:bg-gray-700/80 rounded-xl shadow-lg hover:shadow-xl border-t-4 border-purple-600 transition-all duration-300 transform hover:-translate-y-1 text-right"
-            >
-              <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 flex items-center justify-center text-purple-600 dark:text-purple-300 group-hover:scale-110 transition-transform duration-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-1">الكشف المبكر</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">اكتشاف علامات المرض مبكراً</p>
-                </div>
-              </div>
-            </button>
-            
-            <button
               onClick={handlePreviousExamsClick}
               className="group p-6 bg-white/80 dark:bg-gray-700/80 rounded-xl shadow-lg hover:shadow-xl border-t-4 border-yellow-600 transition-all duration-300 transform hover:-translate-y-1 text-right"
             >
@@ -178,29 +156,6 @@ export default function DashboardPage() {
                 </div>
               </div>
             </button>
-          </div>
-          
-          {/* قسم إضافي للإحصائيات */}
-          <div className="p-6 bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/30 dark:to-green-900/30 rounded-xl mb-10">
-            <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">نظرة عامة على صحتك</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-white dark:bg-gray-700 p-3 rounded-lg shadow">
-                <p className="text-xs text-gray-500 dark:text-gray-400">آخر فحص</p>
-                <p className="text-lg font-bold text-blue-600 dark:text-blue-400 numbers-en">12/05/2025</p>
-              </div>
-              <div className="bg-white dark:bg-gray-700 p-3 rounded-lg shadow">
-                <p className="text-xs text-gray-500 dark:text-gray-400">تحاليل معلقة</p>
-                <p className="text-lg font-bold text-green-600 dark:text-green-400 numbers-en">3</p>
-              </div>
-              <div className="bg-white dark:bg-gray-700 p-3 rounded-lg shadow">
-                <p className="text-xs text-gray-500 dark:text-gray-400">الحالة العامة</p>
-                <p className="text-lg font-bold text-green-600 dark:text-green-400">جيدة</p>
-              </div>
-              <div className="bg-white dark:bg-gray-700 p-3 rounded-lg shadow">
-                <p className="text-xs text-gray-500 dark:text-gray-400">التقييم الصحي</p>
-                <p className="text-lg font-bold text-yellow-600 dark:text-yellow-400 numbers-en">85%</p>
-              </div>
-            </div>
           </div>
           
           {/* زر تسجيل الخروج */}
