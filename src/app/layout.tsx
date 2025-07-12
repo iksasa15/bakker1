@@ -45,12 +45,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/" className="px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
                   الرئيسية
                 </Link>
-                <Link href="/about" className="px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
-                  عن المنصة
-                </Link>
-                <Link href="/symptom-checker" className="px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
-                  فحص الأعراض
-                </Link>
+
+
                 <Link href="/login" className="px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
                   تسجيل الدخول
                 </Link>
@@ -84,22 +80,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </div>
               </div>
               <div>
-                <h3 className="text-lg font-bold mb-4 bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent dark:from-blue-400 dark:to-green-300">روابط سريعة</h3>
                 <ul className="space-y-2">
                   <li>
-                    <Link href="/symptom-checker" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                      فحص الأعراض
-                    </Link>
+
                   </li>
                   <li>
-                    <Link href="/medical-record" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                      السجل الطبي
-                    </Link>
+
                   </li>
                   <li>
-                    <Link href="/contact" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                      اتصل بنا
-                    </Link>
+
                   </li>
                 </ul>
               </div>

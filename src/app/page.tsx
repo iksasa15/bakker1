@@ -162,63 +162,11 @@ export default function HomePage() {
             انضم إلى الآلاف من المستخدمين الذين يستفيدون من خدمات بكّر للحفاظ على صحتهم واتخاذ القرارات الطبية المناسبة
           </p>
           <Link 
-            href="/symptom-checker" 
+            href="/login" 
             className="px-10 py-5 bg-gradient-to-r from-blue-600 to-green-500 text-white rounded-xl text-xl font-medium hover:from-blue-700 hover:to-green-600 transition-all duration-500 shadow-lg hover:shadow-2xl transform hover:-translate-y-2"
           >
             ابدأ التشخيص الآن
           </Link>
-        </div>
-      </div>
-      
-      {/* Testimonials Section */}
-      <div className="mb-32 fade-in-section opacity-0 translate-y-10 transition-all duration-1000">
-        <h2 className="text-3xl md:text-4xl font-bold mb-16 text-gray-800 dark:text-gray-200">ماذا يقول المستخدمون؟</h2>
-        
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-white/90 backdrop-blur-sm p-10 rounded-2xl shadow-xl dark:bg-gray-800/90 border-r-4 border-blue-500 transition-all duration-500 card-hover">
-            <div className="flex justify-end mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-              </svg>
-            </div>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg leading-relaxed">
-              منصة بكّر ساعدتني كثيراً في فهم الأعراض التي كنت أعاني منها، وقدمت لي نصائح مهمة قبل زيارة الطبيب.
-            </p>
-            <div className="text-end">
-              <h4 className="font-semibold text-blue-600 dark:text-blue-400 text-xl">أحمد س.</h4>
-              <p className="text-sm text-gray-500 dark:text-gray-400">الرياض</p>
-            </div>
-          </div>
-          
-          <div className="bg-white/90 backdrop-blur-sm p-10 rounded-2xl shadow-xl dark:bg-gray-800/90 border-r-4 border-green-500 transition-all duration-500 card-hover">
-            <div className="flex justify-end mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-green-400" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-              </svg>
-            </div>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg leading-relaxed">
-              سهولة الاستخدام ودقة المعلومات جعلتني أعتمد على منصة بكّر بشكل دائم لمتابعة صحتي وصحة عائلتي.
-            </p>
-            <div className="text-end">
-              <h4 className="font-semibold text-green-600 dark:text-green-400 text-xl">سارة م.</h4>
-              <p className="text-sm text-gray-500 dark:text-gray-400">جدة</p>
-            </div>
-          </div>
-          
-          <div className="bg-white/90 backdrop-blur-sm p-10 rounded-2xl shadow-xl dark:bg-gray-800/90 border-r-4 border-blue-500 transition-all duration-500 card-hover">
-            <div className="flex justify-end mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-              </svg>
-            </div>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg leading-relaxed">
-              كطبيب، أرى أن منصة بكّر تساهم في رفع الوعي الصحي وتساعد المرضى على اتخاذ قرارات أفضل.
-            </p>
-            <div className="text-end">
-              <h4 className="font-semibold text-blue-600 dark:text-blue-400 text-xl">د. محمد ع.</h4>
-              <p className="text-sm text-gray-500 dark:text-gray-400">أخصائي طب أسرة</p>
-            </div>
-          </div>
         </div>
       </div>
       
@@ -247,4 +195,5 @@ export default function HomePage() {
       </div>
     </div>
   )
+
 }

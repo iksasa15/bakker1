@@ -105,54 +105,84 @@ export default function DashboardPage() {
           </p>
           
           {/* الأزرار الثلاثة بتصميم محسن */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <button
               onClick={handleMedicalHistoryClick}
-              className="group p-6 bg-white/80 dark:bg-gray-700/80 rounded-xl shadow-lg hover:shadow-xl border-t-4 border-blue-600 transition-all duration-300 transform hover:-translate-y-1 text-right"
+              className="group bg-gradient-to-b from-white to-blue-50 dark:from-gray-700 dark:to-gray-800 rounded-2xl shadow-lg hover:shadow-2xl border border-blue-100 dark:border-blue-800 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 overflow-hidden"
             >
-              <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-300 group-hover:scale-110 transition-transform duration-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="relative p-6">
+                {/* زخرفة خلفية */}
+                <div className="absolute -top-6 -right-6 w-16 h-16 bg-blue-500/10 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-500 delay-100"></div>
+                <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-blue-500/10 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-500 delay-200"></div>
+                
+                {/* أيقونة وعنوان */}
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-800 flex items-center justify-center text-white mx-auto mb-4 shadow-lg transform group-hover:rotate-12 transition-transform duration-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-1">التاريخ المرضي</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">عرض وتحديث سجلك الطبي</p>
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">التاريخ المرضي</h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">عرض وتحديث سجلك الطبي</p>
+                
+                {/* تأثير الزر */}
+                <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mx-auto opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-150">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-600 dark:text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
                 </div>
               </div>
             </button>
             
             <button
               onClick={handleAIAnalysisClick}
-              className="group p-6 bg-white/80 dark:bg-gray-700/80 rounded-xl shadow-lg hover:shadow-xl border-t-4 border-green-500 transition-all duration-300 transform hover:-translate-y-1 text-right"
+              className="group bg-gradient-to-b from-white to-green-50 dark:from-gray-700 dark:to-gray-800 rounded-2xl shadow-lg hover:shadow-2xl border border-green-100 dark:border-green-800 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 overflow-hidden"
             >
-              <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900 dark:to-green-800 flex items-center justify-center text-green-600 dark:text-green-300 group-hover:scale-110 transition-transform duration-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="relative p-6">
+                {/* زخرفة خلفية */}
+                <div className="absolute -top-6 -right-6 w-16 h-16 bg-green-500/10 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-500 delay-100"></div>
+                <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-green-500/10 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-500 delay-200"></div>
+                
+                {/* أيقونة وعنوان */}
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-800 flex items-center justify-center text-white mx-auto mb-4 shadow-lg transform group-hover:rotate-12 transition-transform duration-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-1">تحليل الأعراض</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">تحليل ذكي للأعراض التي تعاني منها</p>
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300">تحليل الأعراض</h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">تحليل ذكي للأعراض التي تعاني منها</p>
+                
+                {/* تأثير الزر */}
+                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-150">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600 dark:text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
                 </div>
               </div>
             </button>
             
             <button
               onClick={handlePreviousExamsClick}
-              className="group p-6 bg-white/80 dark:bg-gray-700/80 rounded-xl shadow-lg hover:shadow-xl border-t-4 border-yellow-600 transition-all duration-300 transform hover:-translate-y-1 text-right"
+              className="group bg-gradient-to-b from-white to-amber-50 dark:from-gray-700 dark:to-gray-800 rounded-2xl shadow-lg hover:shadow-2xl border border-amber-100 dark:border-amber-800 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 overflow-hidden"
             >
-              <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-yellow-900 dark:to-yellow-800 flex items-center justify-center text-yellow-600 dark:text-yellow-300 group-hover:scale-110 transition-transform duration-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="relative p-6">
+                {/* زخرفة خلفية */}
+                <div className="absolute -top-6 -right-6 w-16 h-16 bg-amber-500/10 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-500 delay-100"></div>
+                <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-amber-500/10 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-500 delay-200"></div>
+                
+                {/* أيقونة وعنوان */}
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-800 flex items-center justify-center text-white mx-auto mb-4 shadow-lg transform group-hover:rotate-12 transition-transform duration-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-1">الكشوف السابقة</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">مراجعة الفحوصات والنتائج السابقة</p>
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-300">الكشوف السابقة</h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">مراجعة الفحوصات والنتائج السابقة</p>
+                
+                {/* تأثير الزر */}
+                <div className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mx-auto opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-150">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-amber-600 dark:text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
                 </div>
               </div>
             </button>
