@@ -61,7 +61,6 @@ export default function PreviousExamsPage() {
       
       try {
         // إنشاء استعلام للحصول على الفحوصات الخاصة بالمستخدم الحالي
-        // بدون orderBy لتجنب الأخطاء المحتملة
         const examsQuery = query(
           collection(db, "exams"),
           where("userId", "==", userId)
@@ -194,59 +193,63 @@ export default function PreviousExamsPage() {
     return (
       <div className="flex justify-center items-center h-60">
         <div className="relative w-16 h-16">
-          <div className="absolute inset-0 rounded-full border-4 border-blue-100 dark:border-blue-900 opacity-25"></div>
-          <div className="absolute inset-0 rounded-full border-4 border-t-blue-600 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
-          <div className="absolute inset-0 rounded-full border-4 border-t-transparent border-r-green-500 border-b-transparent border-l-transparent animate-spin animation-delay-2000"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-sky-100 opacity-25"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-t-sky-500 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-t-transparent border-r-emerald-400 border-b-transparent border-l-transparent animate-spin animation-delay-2000"></div>
         </div>
       </div>
     );
   }
   
   return (
-    <div className="container mx-auto px-4 py-8 relative">
-      {/* العناصر الزخرفية */}
-      <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-200 dark:bg-blue-900/30 rounded-full mix-blend-multiply opacity-60 dark:opacity-20 animate-float"></div>
-      <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-green-200 dark:bg-green-900/30 rounded-full mix-blend-multiply opacity-60 dark:opacity-20 animate-float animation-delay-2000"></div>
+    <div className="py-12 relative overflow-hidden">
+      {/* العناصر الزخرفية - تطابق أسلوب الصفحة الرئيسية */}
+      <div className="absolute -top-32 -left-32 w-64 h-64 bg-light-blue rounded-full mix-blend-multiply opacity-40 animate-float"></div>
+      <div className="absolute -bottom-20 -right-32 w-64 h-64 bg-light-green rounded-full mix-blend-multiply opacity-40 animate-float animation-delay-2000"></div>
+      <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-light-blue rounded-full mix-blend-multiply opacity-40 animate-float animation-delay-4000"></div>
       
-      <div className="relative z-1">
+      <div className="container mx-auto px-4 relative z-10">
         <div className="flex items-center mb-8">
           <button 
             onClick={goBack} 
-            className="flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 ml-4"
+            className="flex items-center px-4 py-2 bg-white text-sky-500 border-2 border-sky-500 rounded-lg hover:bg-sky-50 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ml-4"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             العودة
           </button>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent dark:from-blue-400 dark:to-green-300">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-sky-500 to-emerald-400 bg-clip-text text-transparent">
             سجلات الفحوصات السابقة
           </h1>
         </div>
         
-        <div className="mb-6 flex justify-between items-center">
-          <p className="text-gray-600 dark:text-gray-300">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+          <p className="text-gray-600 mb-4 md:mb-0">
             عرض جميع الفحوصات السابقة ونتائجها
           </p>
           <button
             onClick={goToNewAnalysis}
-            className="px-4 py-2 bg-gradient-to-r from-blue-600 to-green-500 text-white rounded-lg hover:from-blue-700 hover:to-green-600"
+            className="px-5 py-3 bg-gradient-to-r from-sky-500 to-emerald-400 text-white rounded-xl text-base font-medium hover:from-sky-600 hover:to-emerald-500 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
             فحص جديد
           </button>
         </div>
         
         {errorMessage && (
-          <div className="mb-6 p-3 bg-red-100 text-red-700 rounded-lg border border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800">
+          <div className="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-700 border-r-4 border-red-500">
             <div className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              <span>{errorMessage}</span>
+              {errorMessage}
             </div>
-            <div className="mt-2 text-sm">
+            <div className="mt-2">
               <p>تعليمات للمساعدة:</p>
-              <ul className="list-disc list-inside mt-1">
+              <ul className="list-disc list-inside mt-1 mr-5">
                 <li>تأكد من اتصالك بالإنترنت</li>
                 <li>تحقق من أنك سجلت دخولك بشكل صحيح</li>
                 <li>حاول تحديث الصفحة</li>
@@ -257,47 +260,52 @@ export default function PreviousExamsPage() {
         )}
         
         {loadingExams ? (
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-xl p-8 border border-blue-50 dark:border-blue-900 flex justify-center">
+          <div className="w-full bg-white/90 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-xl border border-gray-200 transition-all duration-300 flex justify-center">
             <div className="flex items-center space-x-2 space-x-reverse">
-              <div className="w-4 h-4 rounded-full bg-blue-600 animate-pulse"></div>
-              <div className="w-4 h-4 rounded-full bg-blue-400 animate-pulse animation-delay-150"></div>
-              <div className="w-4 h-4 rounded-full bg-green-500 animate-pulse animation-delay-300"></div>
-              <span className="text-gray-700 dark:text-gray-300">جاري تحميل السجلات...</span>
+              <div className="w-4 h-4 rounded-full bg-sky-500 animate-pulse"></div>
+              <div className="w-4 h-4 rounded-full bg-sky-300 animate-pulse animation-delay-150"></div>
+              <div className="w-4 h-4 rounded-full bg-emerald-400 animate-pulse animation-delay-300"></div>
+              <span className="text-gray-700">جاري تحميل السجلات...</span>
             </div>
           </div>
         ) : exams.length === 0 ? (
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-xl p-8 border border-blue-50 dark:border-blue-900 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 dark:text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <h3 className="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">لا توجد فحوصات سابقة</h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-4">
+          <div className="w-full bg-white/90 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-xl border border-gray-200 transition-all duration-300 text-center">
+            <div className="inline-block w-16 h-16 rounded-full bg-gradient-to-r from-sky-100 to-emerald-100 flex items-center justify-center text-sky-500 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold bg-gradient-to-r from-sky-500 to-emerald-400 bg-clip-text text-transparent mb-2">لا توجد فحوصات سابقة</h3>
+            <p className="text-gray-600 mb-6">
               لم تقم بإجراء أي فحوصات باستخدام التحليل الذكي بعد.
             </p>
             <button
               onClick={goToNewAnalysis}
-              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-green-500 text-white rounded-lg hover:from-blue-700 hover:to-green-600"
+              className="px-6 py-3 bg-gradient-to-r from-sky-500 to-emerald-400 text-white rounded-xl text-base font-medium hover:from-sky-600 hover:to-emerald-500 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
             >
               إجراء فحص جديد
             </button>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-5">
             {exams.map((exam) => (
               <div 
                 key={exam.id} 
-                className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-md border border-blue-50 dark:border-blue-900 overflow-hidden"
+                className="w-full bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200 transition-all duration-300 hover:shadow-xl"
               >
                 {/* رأس البطاقة مع معلومات أساسية */}
                 <div 
-                  className="p-4 flex justify-between items-center cursor-pointer"
+                  className="flex justify-between items-center cursor-pointer"
                   onClick={() => toggleExamDetails(exam.id)}
                 >
                   <div>
-                    <div className="text-lg font-medium text-gray-800 dark:text-gray-200">
+                    <div className="text-lg font-semibold text-gray-800">
                       {exam.results && exam.results.length > 0 ? exam.results[0].disease : "نتيجة غير معروفة"}
                     </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                    <div className="text-sm text-gray-500 mt-1 flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
                       {formatDate(exam.date)}
                     </div>
                   </div>
@@ -306,33 +314,38 @@ export default function PreviousExamsPage() {
                       <div className="flex items-center ml-4">
                         <div 
                           className={`w-3 h-3 rounded-full mr-2 ${
-                            exam.results[0].confidenceLevel === 'high' ? 'bg-green-500' : 
+                            exam.results[0].confidenceLevel === 'high' ? 'bg-emerald-500' : 
                             exam.results[0].confidenceLevel === 'medium' ? 'bg-yellow-500' : 'bg-red-500'
                           }`}
                         ></div>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                        <span className="text-sm text-gray-600">
                           {(exam.results[0].confidence * 100).toFixed(1)}%
                         </span>
                       </div>
                     )}
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      className={`h-5 w-5 text-gray-500 transition-transform ${expandedExam === exam.id ? 'transform rotate-180' : ''}`} 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <div className="p-2 bg-gray-100 rounded-full mr-2 transition-all duration-300 hover:bg-gray-200">
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className={`h-5 w-5 text-gray-600 transition-transform ${expandedExam === exam.id ? 'transform rotate-180' : ''}`} 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
                 
                 {/* تفاصيل إضافية تظهر عند النقر */}
                 {expandedExam === exam.id && (
-                  <div className="p-4 pt-0 border-t border-gray-100 dark:border-gray-700">
+                  <div className="mt-5 pt-5 border-t border-gray-100">
                     {/* قسم الأعراض */}
-                    <div className="mb-4">
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <div className="mb-6">
+                      <h4 className="text-sm font-medium text-sky-700 mb-2 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                         الأعراض:
                       </h4>
                       <div className="flex flex-wrap gap-2">
@@ -340,50 +353,71 @@ export default function PreviousExamsPage() {
                           exam.symptoms.map((symptom, index) => (
                             <span 
                               key={index} 
-                              className="bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 rounded-full px-3 py-1 text-xs"
+                              className="bg-gradient-to-r from-sky-100 to-emerald-100 text-sky-800 rounded-full px-3 py-1 text-sm"
                             >
                               {symptom.replace(/_/g, ' ')}
                             </span>
                           ))
                         ) : (
-                          <span className="text-gray-500 dark:text-gray-400 text-sm">لا توجد أعراض مسجلة</span>
+                          <span className="text-gray-500 text-sm">لا توجد أعراض مسجلة</span>
                         )}
                       </div>
                     </div>
                     
                     {/* قسم النتائج */}
                     {exam.results && exam.results.length > 0 ? (
-                      <div className="mb-4">
-                        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <div className="mb-6">
+                        <h4 className="text-sm font-medium text-sky-700 mb-2 flex items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                          </svg>
                           نتائج التشخيص:
                         </h4>
-                        <ul className="space-y-1">
-                          {exam.results.map((result, index) => (
-                            <li key={index} className="flex justify-between items-center">
-                              <span className="text-gray-600 dark:text-gray-400">{result.disease}</span>
-                              <span className="text-sm text-gray-500 dark:text-gray-500">
-                                {(result.confidence * 100).toFixed(1)}%
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
+                        <div className="bg-gradient-to-r from-sky-50 to-emerald-50 rounded-lg p-4">
+                          <ul className="space-y-2">
+                            {exam.results.map((result, index) => (
+                              <li key={index} className="flex justify-between items-center">
+                                <span className={`text-gray-800 ${index === 0 ? 'font-medium' : ''}`}>
+                                  {result.disease}
+                                </span>
+                                <div className="flex items-center">
+                                  <div 
+                                    className={`w-2 h-2 rounded-full mr-2 ${
+                                      result.confidenceLevel === 'high' ? 'bg-emerald-500' : 
+                                      result.confidenceLevel === 'medium' ? 'bg-yellow-500' : 'bg-red-500'
+                                    }`}
+                                  ></div>
+                                  <span className="text-sm text-gray-600">
+                                    {(result.confidence * 100).toFixed(1)}%
+                                  </span>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     ) : (
-                      <div className="mb-4">
-                        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <div className="mb-6">
+                        <h4 className="text-sm font-medium text-sky-700 mb-2 flex items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                          </svg>
                           نتائج التشخيص:
                         </h4>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm">لا توجد نتائج مسجلة</p>
+                        <p className="text-gray-500 text-sm">لا توجد نتائج مسجلة</p>
                       </div>
                     )}
                     
                     {/* ملاحظات إضافية إذا وجدت */}
                     {exam.notes && (
-                      <div className="mb-4">
-                        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <div className="mb-6">
+                        <h4 className="text-sm font-medium text-sky-700 mb-2 flex items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
                           ملاحظات:
                         </h4>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm">
+                        <p className="text-gray-600 bg-gray-50 p-3 rounded-lg">
                           {exam.notes}
                         </p>
                       </div>
@@ -396,9 +430,9 @@ export default function PreviousExamsPage() {
                           e.stopPropagation();
                           deleteExam(exam.id);
                         }}
-                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-sm flex items-center"
+                        className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all duration-300 flex items-center"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                         حذف السجل
